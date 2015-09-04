@@ -98,19 +98,18 @@ function load(config, options, onLoad){
       return;
     }
 
-    var defaultedData = _.defaultsDeep(env, data, defaults);
-
-    // If Joi is allowing unknown, attach our nicities
-    if(joiOptions.allowUnknown){
-      defaultedData = _.defaultsDeep(defaultedData, nodeEnv, {
-        NODE_ENV: getNodeEnv()
-      });
-    }
-
-    joi.validate(defaultedData, schema, joiOptions, onLoad);
+    joi.validate(data, schema, joiOptions, onLoad);
   }
 
-  resolver.resolve(data, onResolve);
+  var defaultedData = _.defaultsDeep(env, data, defaults);
+  // If Joi is allowing unknown, attach our nicities
+  if(joiOptions.allowUnknown){
+    defaultedData = _.defaultsDeep(defaultedData, nodeEnv, {
+      NODE_ENV: getNodeEnv()
+    });
+  }
+
+  resolver.resolve(defaultedData, onResolve);
 }
 
 module.exports = load;
