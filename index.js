@@ -4,6 +4,12 @@ var _ = require('lodash');
 var joi = require('joi');
 var shortstop = require('shortstop');
 
+var defaultJoiOptions = {
+  abortEarly: false,
+  allowUnknown: true,
+  presence: 'required'
+};
+
 var reservedProps = [
   'description',
   'validate',
@@ -76,7 +82,7 @@ function load(config, options, onLoad){
 
   _.forEach(options.handlers, registerHandlers);
 
-  var joiOptions = _.assign({}, { allowUnknown: true }, options.joi);
+  var joiOptions = _.assign({}, defaultJoiOptions, options.joi);
 
   var env = _.mapValues(config, fromEnv);
   var data = _.mapValues(config, traverse('resolve'));
